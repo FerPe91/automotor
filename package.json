@@ -1,0 +1,17 @@
+{
+  "name": "regautomotor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "convertir": "tsc automotor.ts",
+    "ejecutar": "node automotor.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.7.23",
+    "readfilesync": "^1.1.5",
+    "readline-sync": "^1.4.10"
+  }
+}

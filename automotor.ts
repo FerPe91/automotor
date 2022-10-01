@@ -96,7 +96,7 @@ class GestorDeArchivos {
     constructor(txtFileLocation: string) {
 
         let archivoTxt: string = fs.readFileSync(txtFileLocation, 'utf-8');
-        this.arregloString = archivoTxt.split(';');  //vamos a tener nuestro "objetos" separados por ;
+        this.arregloString = archivoTxt.split(';');  //vamoS a tener nuestro "objetos" separados por ;
         
     }
 

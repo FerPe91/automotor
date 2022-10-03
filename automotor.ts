@@ -18,11 +18,35 @@ class Auto{
         return this.marca
     }
 
+    public getModelo(){
+        return this.modelo
+    }
 
+    public getAño(){
+        return this.año
+    }
     public getPatente(){
         return this.patente
     }
 
+    public setMarca(valor:string){
+        this.marca=valor
+        return this.marca
+    }
+
+    public setModelo(valor:string){
+        this.modelo=valor
+        return this.modelo
+    }
+
+    public setAño(valor:number){
+        this.año=valor
+        return this.año
+    }
+    public setPatente(valor:string){
+        this.patente=valor
+        return this.patente
+    }
 
     public mostrarInfo(){
         return `Auto ${this.marca}, modelo: ${this.modelo}, año ${this.año}, patente ${this.patente}`
@@ -43,41 +67,22 @@ class RegistroAutomotor{
     }
 
     public mostrarAutos() {
-        console.log(this.listaAutos)
+        let cadena:string=""
+        for(let i=0;i<arrayAuto.length; i++){
+            cadena+= i+1 +") "+ arrayAuto[i].getMarca()+"-"+ arrayAuto[i].getModelo()+"-"+ arrayAuto[i].getAño()+"-"+ arrayAuto[i].getPatente()+"\n"
+        }
+        console.log(cadena)
     }
     public borrarAuto(position: number) :void {
-        let autoBorrado =+ this.listaAutos.splice(position,1)
+        console.log("-------------------------LISTADO---------------------------")
+        console.log("SE ELIMINO"+arrayAuto[position].getMarca()+"-"+ arrayAuto[position].getModelo()+"-"+ arrayAuto[position].getAño()+"-"+ arrayAuto[position].getPatente())
+        this.listaAutos.splice(position,1)
     }
-    public modificarAuto(listaAutos:Array<Auto>){
-        //editar un auto en el arreglo
-        console.log("Opciones a modificar:\n 1)MARCA \n2)MODELO \n3)ANIO \n4)PATENTE")
-        let op: number = Number(readFileSync.question("INGRESE LA OPCION: "));
-
-        switch ( op ) {
-            case 1:
-                console.log()
-                let marca: string = readFileSync.question("Ingrese el MARCA: ")
-                break;
-            case 2:
-                let modelo = readFileSync.question("Ingrese el MODELO: ");
-                break;
-            case 3:
-                let año: number = Number(readFileSync.question("Ingrese el AÑO: "));
-                break;
-            case 4:
-                let patente: string = readFileSync.question("Ingrese la PATENTE: ");
-                break;
-            default: 
-                // 
-                break;
-        }    
-        
-    }
-
-
+    
     //para dar de alta hice lo mismo que en modificar Auto pero esta vez agregando nuevoAuto al array original
 
     public darDeAlta(listaAutos:Array<Auto>){
+        console.log("---------------DAR DE ALTA-----------------------")
         let marca: string = readFileSync.question("Ingrese el MARCA: ")
         let modelo = readFileSync.question("Ingrese el MODELO: ");
         let año: number = Number(readFileSync.question("Ingrese el ANIO: "));
@@ -112,6 +117,36 @@ class GestorDeArchivos {
 }
 
 
+
+function modificarAuto(listaAutos:Array<Auto>, auto:number){
+    //editar un auto en el arreglo
+    console.log("---------------MODIFICAR AUTO-----------------------")
+    registro1.mostrarAutos()
+    console.log("Opciones a modificar:\n 1)MARCA \n2)MODELO \n3)ANIO \n4)PATENTE")
+    let op: number = Number(readFileSync.question("INGRESE LA OPCION: "));
+    switch ( op ) {
+        case 1:
+            let marca: string = readFileSync.question("Ingrese el MARCA: ")
+            arrayAuto[auto].setMarca(marca)
+            break;
+        case 2:
+            let modelo = readFileSync.question("Ingrese el MODELO: ");
+            arrayAuto[auto].setModelo(modelo)
+            break;
+        case 3:
+            let año: number = Number(readFileSync.question("Ingrese el AÑO: "));
+            arrayAuto[auto].setAño(año)
+            break;
+        case 4:
+            let patente: string = readFileSync.question("Ingrese la PATENTE: ");
+            arrayAuto[auto].setPatente(patente)
+            break;
+        default:  
+            break;
+    }
+
+}
+
 function crearAuto(vehiculo:string, arrayVehiculo: Array<Auto>): void {
 
   
@@ -129,20 +164,46 @@ function crearAuto(vehiculo:string, arrayVehiculo: Array<Auto>): void {
 //Inicio programa
 let datos: GestorDeArchivos = new GestorDeArchivos('autos.txt'); // devuelve un arreglo de strings con "elementos" de Autos.
 let arrayAuto: Array<Auto> = [];
-
 for (let i: number = 0; i < datos.getArregloString().length; i++) {
 
     //Creo auto, uno por uno, leyendo el txt
     crearAuto(datos.getArregloString()[i], arrayAuto);
 
 }
-
 let registro1 :RegistroAutomotor = new RegistroAutomotor(arrayAuto)
-console.log(arrayAuto)
-//registro1.borrarAuto(0)
+
 console.log("--------------AUTOS REGISTRADOS----------------")
-//console.log(arrayAuto)
-registro1.modificarAuto(arrayAuto)
-console.log(arrayAuto)
-registro1.darDeAlta(arrayAuto)
-console.log(arrayAuto)
+console.log("lista de vehiculos")
+registro1.mostrarAutos()
+
+console.log("MENU:\n1)DAR DE ALTA \n2)BORRAR REGISTRO \n3)MODIFICAR REGISTRO \n4)VER LISTADO  \n0)SALIR")
+let op: number = Number(readFileSync.question("INGRESE LA OPCION: "));
+while(op<=4){
+    switch ( op ) {
+        case 1:
+            registro1.darDeAlta(arrayAuto)
+            registro1.mostrarAutos()
+            break
+        case 2:
+            registro1.mostrarAutos()
+            let valor: number = Number(readFileSync.question("INGRESE LA OPCION: "));
+            registro1.borrarAuto(valor-1)
+            break
+        case 3:
+            registro1.mostrarAutos()
+            let valor2: number = Number(readFileSync.question("INGRESE LA OPCION: "));
+            modificarAuto(arrayAuto,valor2-1)
+            break
+        case 4:
+            console.log("-------------------------LISTADO---------------------------")
+            registro1.mostrarAutos()
+            break
+        default:  
+            break;
+    }
+    console.log("------------------------------------------------------------------")
+    console.log("MENU:\n1)DAR DE ALTA \n2)BORRAR REGISTRO \n3)MODIFICAR REGISTRO \n4)VER LISTADO  \n0)SALIR")
+    op = Number(readFileSync.question("INGRESE LA OPCION: "));
+}
+
+

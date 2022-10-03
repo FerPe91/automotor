@@ -12,7 +12,29 @@ var Auto = /** @class */ (function () {
     Auto.prototype.getMarca = function () {
         return this.marca;
     };
+    Auto.prototype.getModelo = function () {
+        return this.modelo;
+    };
+    Auto.prototype.getAño = function () {
+        return this.año;
+    };
     Auto.prototype.getPatente = function () {
+        return this.patente;
+    };
+    Auto.prototype.setMarca = function (valor) {
+        this.marca = valor;
+        return this.marca;
+    };
+    Auto.prototype.setModelo = function (valor) {
+        this.modelo = valor;
+        return this.modelo;
+    };
+    Auto.prototype.setAño = function (valor) {
+        this.año = valor;
+        return this.año;
+    };
+    Auto.prototype.setPatente = function (valor) {
+        this.patente = valor;
         return this.patente;
     };
     Auto.prototype.mostrarInfo = function () {
@@ -31,36 +53,20 @@ var RegistroAutomotor = /** @class */ (function () {
         this.listaAutos = arreglo;
     };
     RegistroAutomotor.prototype.mostrarAutos = function () {
-        console.log(this.listaAutos);
+        var cadena = "";
+        for (var i = 0; i < arrayAuto.length; i++) {
+            cadena += i + 1 + ") " + arrayAuto[i].getMarca() + "-" + arrayAuto[i].getModelo() + "-" + arrayAuto[i].getAño() + "-" + arrayAuto[i].getPatente() + "\n";
+        }
+        console.log(cadena);
     };
     RegistroAutomotor.prototype.borrarAuto = function (position) {
-        var autoBorrado = +this.listaAutos.splice(position, 1);
-    };
-    RegistroAutomotor.prototype.modificarAuto = function (listaAutos) {
-        //editar un auto en el arreglo
-        console.log("Opciones a modificar:\n 1)MARCA \n2)MODELO \n3)ANIO \n4) PATENTE");
-        var op = Number(readFileSync.question("INGRESE LA OPCION: "));
-        switch (op) {
-            case 1:
-                console.log();
-                var marca = readFileSync.question("Ingrese el MARCA: ");
-                break;
-            case 2:
-                var modelo = readFileSync.question("Ingrese el MODELO: ");
-                break;
-            case 3:
-                var año = Number(readFileSync.question("Ingrese el AÑO: "));
-                break;
-            case 4:
-                var patente = readFileSync.question("Ingrese la PATENTE: ");
-                break;
-            default:
-                // 
-                break;
-        }
+        console.log("-------------------------LISTADO---------------------------");
+        console.log("SE ELIMINO" + arrayAuto[position].getMarca() + "-" + arrayAuto[position].getModelo() + "-" + arrayAuto[position].getAño() + "-" + arrayAuto[position].getPatente());
+        this.listaAutos.splice(position, 1);
     };
     //para dar de alta hice lo mismo que en modificar Auto pero esta vez agregando nuevoAuto al array original
     RegistroAutomotor.prototype.darDeAlta = function (listaAutos) {
+        console.log("---------------DAR DE ALTA-----------------------");
         var marca = readFileSync.question("Ingrese el MARCA: ");
         var modelo = readFileSync.question("Ingrese el MODELO: ");
         var año = Number(readFileSync.question("Ingrese el ANIO: "));
@@ -73,7 +79,7 @@ var RegistroAutomotor = /** @class */ (function () {
 var GestorDeArchivos = /** @class */ (function () {
     function GestorDeArchivos(txtFileLocation) {
         var archivoTxt = fs.readFileSync(txtFileLocation, 'utf-8');
-        this.arregloString = archivoTxt.split(';'); //vamos a tener nuestro "objetos" separados por ;
+        this.arregloString = archivoTxt.split(';'); //vamoS a tener nuestro "objetos" separados por ;
     }
     GestorDeArchivos.prototype.mostrarArreglo = function () {
         console.log(this.arregloString);
@@ -83,6 +89,33 @@ var GestorDeArchivos = /** @class */ (function () {
     };
     return GestorDeArchivos;
 }());
+function modificarAuto(listaAutos, auto) {
+    //editar un auto en el arreglo
+    console.log("---------------MODIFICAR AUTO-----------------------");
+    registro1.mostrarAutos();
+    console.log("Opciones a modificar:\n 1)MARCA \n2)MODELO \n3)ANIO \n4)PATENTE");
+    var op = Number(readFileSync.question("INGRESE LA OPCION: "));
+    switch (op) {
+        case 1:
+            var marca = readFileSync.question("Ingrese el MARCA: ");
+            arrayAuto[auto].setMarca(marca);
+            break;
+        case 2:
+            var modelo = readFileSync.question("Ingrese el MODELO: ");
+            arrayAuto[auto].setModelo(modelo);
+            break;
+        case 3:
+            var año = Number(readFileSync.question("Ingrese el AÑO: "));
+            arrayAuto[auto].setAño(año);
+            break;
+        case 4:
+            var patente = readFileSync.question("Ingrese la PATENTE: ");
+            arrayAuto[auto].setPatente(patente);
+            break;
+        default:
+            break;
+    }
+}
 function crearAuto(vehiculo, arrayVehiculo) {
     var propiedadAuto = vehiculo.split(',');
     var marca = propiedadAuto[0];
@@ -101,11 +134,35 @@ for (var i = 0; i < datos.getArregloString().length; i++) {
     crearAuto(datos.getArregloString()[i], arrayAuto);
 }
 var registro1 = new RegistroAutomotor(arrayAuto);
-console.log(arrayAuto);
-//registro1.borrarAuto(0)
 console.log("--------------AUTOS REGISTRADOS----------------");
-//console.log(arrayAuto)
-registro1.modificarAuto(arrayAuto);
-console.log(arrayAuto);
-registro1.darDeAlta(arrayAuto);
-console.log(arrayAuto);
+console.log("lista de vehiculos");
+registro1.mostrarAutos();
+console.log("MENU:\n1)DAR DE ALTA \n2)BORRAR REGISTRO \n3)MODIFICAR REGISTRO \n4)VER LISTADO  \n0)SALIR");
+var op = Number(readFileSync.question("INGRESE LA OPCION: "));
+while (op <= 4) {
+    switch (op) {
+        case 1:
+            registro1.darDeAlta(arrayAuto);
+            registro1.mostrarAutos();
+            break;
+        case 2:
+            registro1.mostrarAutos();
+            var valor = Number(readFileSync.question("INGRESE LA OPCION: "));
+            registro1.borrarAuto(valor - 1);
+            break;
+        case 3:
+            registro1.mostrarAutos();
+            var valor2 = Number(readFileSync.question("INGRESE LA OPCION: "));
+            modificarAuto(arrayAuto, valor2 - 1);
+            break;
+        case 4:
+            console.log("-------------------------LISTADO---------------------------");
+            registro1.mostrarAutos();
+            break;
+        default:
+            break;
+    }
+    console.log("------------------------------------------------------------------");
+    console.log("MENU:\n1)DAR DE ALTA \n2)BORRAR REGISTRO \n3)MODIFICAR REGISTRO \n4)VER LISTADO  \n0)SALIR");
+    op = Number(readFileSync.question("INGRESE LA OPCION: "));
+}
